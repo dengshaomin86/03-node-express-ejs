@@ -1,5 +1,6 @@
 // 配置启动服务
 const express = require('express');
+const {getIPAddress} = require('./utils.js');
 
 const app = express();
 
@@ -31,5 +32,6 @@ app.use('/users', usersRouter);
 app.use('/', indexRouter);
 
 app.listen(config.port, function () {
-    console.log('http://localhost:' + config.port);
+    console.log(`http://localhost:${config.port}`);
+    console.log(`http://${getIPAddress()}:${config.port}`);
 });
