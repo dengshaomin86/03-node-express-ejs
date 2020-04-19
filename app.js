@@ -1,6 +1,6 @@
 // 配置启动服务
 const express = require('express');
-const {getIPAddress} = require('./utils.js');
+const {getIPAddress} = require('./utils/index.js');
 
 const app = express();
 
