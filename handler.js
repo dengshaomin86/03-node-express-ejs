@@ -10,7 +10,7 @@ const {db_user} = require("./utils/database.js");
 
 module.exports.index = function (req, res) {
   readFile(function (data) {
-    res.render('index', {list: data, name: 'peter'}, function (err, result) {
+    res.render('index', {list: data}, function (err, result) {
       if (err) {
         throw err;
       }
@@ -44,6 +44,7 @@ module.exports.addGet = function (req, res) {
     req.query.id = (list.length ? Math.max.apply(null, list.map(function (o) {
       return o.id
     })) : 0) + 1;
+    req.query.time = new Date().toUTCString();
     list.push(req.query);
 
     writeFile(JSON.stringify(list), function () {
@@ -60,7 +61,7 @@ module.exports.addPost = function (req, res) {
       postBody.id = (list.length ? Math.max.apply(null, list.map(function (o) {
         return o.id
       })) : 0) + 1;
-
+      postBody.time = new Date().toUTCString();
       list.push(postBody);
 
       writeFile(JSON.stringify(list), function () {
