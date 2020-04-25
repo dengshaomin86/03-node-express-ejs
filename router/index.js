@@ -10,6 +10,8 @@ router.get('/detail', handler.detail);
 router.get('/submit', handler.submit);
 router.get('/add', handler.addGet);
 router.post('/add', handler.addPost);
+router.post('/signIn', handler.signIn);
+router.post('/signUp', handler.signUp);
 router.get('/favicon.ico', handler.favicon);
 
 // 处理静态资源

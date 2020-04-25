@@ -1,5 +1,4 @@
 const os = require('os');
-const querystring = require('querystring');
 
 /**
  * 获取 post 数据
@@ -16,7 +15,7 @@ function getPostBody(req, callback) {
   req.on('end', function () {
     // 组装数据
     let postBody = Buffer.concat(arr);
-    postBody = querystring.parse(postBody.toString('utf8'));
+    postBody = JSON.parse(postBody.toString('utf8'));
     callback(postBody);
   });
 }

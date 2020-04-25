@@ -6,6 +6,7 @@ const url = "mongodb://127.0.0.1:27017/runoob";
 const db_name = "test";
 
 const db_fn = {
+  collectionName: "student",
   connect() {
     return new Promise((resolve, reject) => {
       MongoClient.connect(url, (err, client) => {
@@ -21,7 +22,7 @@ const db_fn = {
   add(obj) {
     return new Promise((resolve, reject) => {
       this.connect().then(client => {
-        const collection = client.db(db_name).collection("student");
+        const collection = client.db(db_name).collection(this.collectionName);
         // 存入数据并退出连接
         collection.insertOne(obj, (err, result) => {
           client.close();
@@ -37,7 +38,7 @@ const db_fn = {
   remove(obj) {
     return new Promise((resolve, reject) => {
       this.connect().then(client => {
-        const collection = client.db(db_name).collection("student");
+        const collection = client.db(db_name).collection(this.collectionName);
         this.findOne(obj._id).then(source => {
           // 更新指定数据并退出连接
           // delete source._id;
@@ -66,7 +67,7 @@ const db_fn = {
   modify(obj) {
     return new Promise((resolve, reject) => {
       this.connect().then(client => {
-        const collection = client.db(db_name).collection("student");
+        const collection = client.db(db_name).collection(this.collectionName);
         this.findOne(obj._id).then(source => {
           // 更新指定数据并退出连接
           delete source._id;
@@ -92,7 +93,7 @@ const db_fn = {
   find() {
     return new Promise((resolve, reject) => {
       this.connect().then(client => {
-        const collection = client.db(db_name).collection("student");
+        const collection = client.db(db_name).collection(this.collectionName);
         collection.find().toArray((err, res) => {
           client.close();
           if (err) {
@@ -109,7 +110,7 @@ const db_fn = {
   findOne(_id) {
     return new Promise((resolve, reject) => {
       this.connect().then(client => {
-        const collection = client.db(db_name).collection("student");
+        const collection = client.db(db_name).collection(this.collectionName);
         collection.find().toArray((err, res) => {
           client.close();
           if (err) {
@@ -130,4 +131,62 @@ const db_fn = {
   }
 };
 
-module.exports = db_fn;
+const db_user = {
+  collectionName: "user",
+  connect() {
+    return new Promise((resolve, reject) => {
+      MongoClient.connect(url, (err, client) => {
+        if (err) {
+          console.log("数据库连接失败", err);
+          reject("数据库连接失败");
+          return;
+        }
+        resolve(client);
+      });
+    });
+  },
+  add(obj) {
+    return new Promise((resolve, reject) => {
+      this.connect().then(client => {
+        const collection = client.db(db_name).collection(this.collectionName);
+        // 存入数据并退出连接
+        collection.insertOne(obj, (err, result) => {
+          client.close();
+          if (err) {
+            reject("新增失败");
+            return;
+          }
+          resolve("新增成功");
+        });
+      });
+    });
+  },
+  findAllUser() {},
+  findUser(username) {
+    return new Promise((resolve, reject) => {
+      this.connect().then(client => {
+        const collection = client.db(db_name).collection(this.collectionName);
+        collection.find().toArray((err, res) => {
+          client.close();
+          if (err) {
+            reject("查询失败");
+            return;
+          }
+          let source = res.find(item => String(item.username) === username);
+          if (!source) {
+            reject("无匹配");
+            return;
+          }
+          resolve(source);
+        });
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+};
+
+module.exports = {
+  db_fn,
+  db_user,
+};
