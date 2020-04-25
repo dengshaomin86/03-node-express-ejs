@@ -2,6 +2,6 @@
 const path = require('path');
 
 module.exports = {
-    port: 8088,
+    port: 3000,
     staticPath: path.join(__dirname, 'static')
 };
